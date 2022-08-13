@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>API Preview</title>
+    </head>
+    <body>
+    <script src="https://api.apiary.io/seeds/embed.js"></script>
+    <script>
+    var embed = new Apiary.Embed({
+    apiBlueprint: `FORMAT: 1A
+
+# G-Point API
+
+## 草案 追加・変更・削除など意見があれば教えてください
+
+# サークル一覧 [/v1/clubs]
+
+## サークルidを返します [GET]
+
+
++ Response 200 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S200&quot;
+            },
+            &quot;payload&quot;: {
+                &quot;clubs&quot;: [
+                    {
+                        &quot;type&quot;: &quot;tenji&quot;,
+                        &quot;name&quot;: &quot;物理部&quot;,
+                        &quot;id&quot;: &quot;000000&quot;,
+                        &quot;point&quot;: 30
+                    }
+                ],
+                ...
+                &quot;total&quot;: 10
+            }
+        }
+        
+        &#96;&#96;&#96;
+# サークル詳細 [/v1/club/{clubId}]
+
+## サークル詳細を取得します [GET]
+
++ Parameters
+    + clubId: 000000  (string, required)
+
++ Response 200 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S200&quot;
+            },
+            &quot;payload&quot;: {
+                &quot;type&quot;: &quot;tenji&quot;,
+                &quot;name&quot;: &quot;物理部&quot;,
+                &quot;id&quot;: &quot;000000&quot;,
+                &quot;point&quot;: 30
+            }
+        }
+
+        &#96;&#96;&#96;
++ Response 404 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S404&quot;,
+                &quot;message&quot;: &quot;サークルが存在しません&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;
+# ユーザー詳細 [/v1/user/{userId}/index]
+
+## ユーザー詳細を取得します [GET]
+
++ Parameters
+    + userId: 000000  (string, required)
+
++ Response 200 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S200&quot;
+            },
+            &quot;payload&quot;: {
+                &quot;id&quot;: &quot;000000&quot;,
+                &quot;point&quot;: 100,
+                &quot;exchange&quot;: {
+                    &quot;itemId1&quot;: true,
+                    &quot;itemId2&quot;: false,
+                    ...
+                },
+                &quot;histories&quot;: [
+                    {
+                        &quot;description&quot;: &quot;物理部&quot;,
+                        &quot;id&quot;: &quot;000000&quot;,
+                        &quot;dateTime&quot;: &quot;2000-00-00T00:00:00+09:00&quot;,
+                        &quot;point&quot;: -60
+                    },
+                    ...
+                ],
+                &quot;total&quot;: 10
+            }
+        }
+
+        &#96;&#96;&#96;
++ Response 404 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S404&quot;,
+                &quot;message&quot;: &quot;ユーザーが存在しません&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;
+
+# ユーザー登録 [/v1/user/{userId}/store]
+
+## ユーザー登録します [POST]
+
++ Parameters
+    + userId: 000000  (string, required)
+
++ Request (application/json)
+    + Attributes
+        + point: 100 (number, optional) - 初期ポイント
+
++ Response 201 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S201&quot;
+            },
+            &quot;payload&quot;: {
+                &quot;id&quot;: &quot;000000&quot;,
+                &quot;point&quot;: 100,
+                &quot;exchange&quot;: {
+                    &quot;itemId1&quot;: false,
+                    &quot;itemId2&quot;: false,
+                    ...
+                },
+                &quot;histories&quot;: [
+                    {
+                        &quot;description&quot;: &quot;初期ポイント&quot;,
+                        &quot;id&quot;: &quot;000000&quot;,
+                        &quot;dateTime&quot;: &quot;2000-00-00T00:00:00+09:00&quot;,
+                        &quot;point&quot;: 100
+                    }
+                    ...
+                ],
+                &quot;total&quot;: 10
+            }
+        }
+
+        &#96;&#96;&#96;
++ Response 400 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S400&quot;,
+                &quot;message&quot;: &quot;ユーザーが既に存在します&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;
+# ユーザー情報更新 [/v1/user/{userId}/update]
+
+## サークルに訪れた時の処理 [PUT]
+
++ Parameters
+    + userId: 000000  (string, required)
+
++ Request (application/json)
+    + Attributes
+        + point: 100 (number, required)
+        + clubId: &quot;000000&quot; (string, required)
+        + dateTime: &quot;2000-00-00T00:00:00+09:00&quot; (string, required)
+
++ Response 201 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S201&quot;
+            },
+            &quot;payload&quot;: {
+                &quot;id&quot;: &quot;000000&quot;,
+                &quot;point&quot;: 100,
+                &quot;exchange&quot;: {
+                    &quot;itemId1&quot;: false,
+                    &quot;itemId2&quot;: false,
+                    ...
+                },
+                &quot;histories&quot;: [
+                    {
+                        &quot;description&quot;: &quot;初期ポイント&quot;,
+                        &quot;id&quot;: &quot;000000&quot;,
+                        &quot;dateTime&quot;: &quot;2000-00-00T00:00:00+09:00&quot;,
+                        &quot;point&quot;: 100
+                    }
+                    ...
+                ],
+                &quot;total&quot;: 10
+            }
+        }
+
+        &#96;&#96;&#96;
++ Response 200 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S200&quot;,
+                &quot;message&quot;: &quot;既に存在します&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;
++ Response 400 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S400&quot;,
+                &quot;message&quot;: &quot;ポイントが足りません&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;
++ Response 404 (application/json)
+    + Body
+        &#96;&#96;&#96;
+        {
+            &quot;header&quot;: {
+                &quot;resultCode&quot;: &quot;S404&quot;,
+                &quot;message&quot;: &quot;ユーザーが存在ません&quot;
+            }
+        }
+        
+        &#96;&#96;&#96;`,
+    });
+    </script>
+    </body>
+    </html>
